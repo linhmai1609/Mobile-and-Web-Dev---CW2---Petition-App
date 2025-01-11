@@ -19,20 +19,20 @@ import { type SubmitHandler, useForm } from "react-hook-form"
 
 import {
   type ApiError,
-  type UserPublic,
-  type UserUpdate,
+  type Dim_UserPublic,
+  type Dim_UserUpdate,
   UsersService,
 } from "../../client"
 import useCustomToast from "../../hooks/useCustomToast"
 import { emailPattern, handleError } from "../../utils"
 
 interface EditUserProps {
-  user: UserPublic
+  user: Dim_UserPublic
   isOpen: boolean
   onClose: () => void
 }
 
-interface UserUpdateForm extends UserUpdate {
+interface UserUpdateForm extends Dim_UserUpdate {
   confirm_password: string
 }
 

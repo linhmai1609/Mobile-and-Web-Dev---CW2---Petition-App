@@ -10,6 +10,9 @@ import {
   Link,
   Text,
 } from "@chakra-ui/react"
+import { 
+  SimpleDatePicker
+} from 'simple-chakra-ui-datepicker';
 import {
   Link as RouterLink,
   createFileRoute,
@@ -18,7 +21,7 @@ import {
 import { type SubmitHandler, useForm } from "react-hook-form"
 
 import Logo from "/assets/images/fastapi-logo.svg"
-import type { UserRegister } from "../client"
+import type { Dim_UserRegister } from "../client"
 import useAuth, { isLoggedIn } from "../hooks/useAuth"
 import { confirmPasswordRules, emailPattern, passwordRules } from "../utils"
 
@@ -33,7 +36,7 @@ export const Route = createFileRoute("/signup")({
   },
 })
 
-interface UserRegisterForm extends UserRegister {
+interface UserRegisterForm extends Dim_UserRegister {
   confirm_password: string
 }
 
@@ -50,6 +53,8 @@ function SignUp() {
     defaultValues: {
       email: "",
       full_name: "",
+      dob: "",
+      bioid: "",
       password: "",
       confirm_password: "",
     },
@@ -80,21 +85,6 @@ function SignUp() {
             alignSelf="center"
             mb={4}
           />
-          <FormControl id="full_name" isInvalid={!!errors.full_name}>
-            <FormLabel htmlFor="full_name" srOnly>
-              Full Name
-            </FormLabel>
-            <Input
-              id="full_name"
-              minLength={3}
-              {...register("full_name", { required: "Full Name is required" })}
-              placeholder="Full Name"
-              type="text"
-            />
-            {errors.full_name && (
-              <FormErrorMessage>{errors.full_name.message}</FormErrorMessage>
-            )}
-          </FormControl>
           <FormControl id="email" isInvalid={!!errors.email}>
             <FormLabel htmlFor="username" srOnly>
               Email
@@ -110,6 +100,55 @@ function SignUp() {
             />
             {errors.email && (
               <FormErrorMessage>{errors.email.message}</FormErrorMessage>
+            )}
+          </FormControl>
+          <FormControl id="full_name" isInvalid={!!errors.full_name}>
+            <FormLabel htmlFor="full_name" srOnly>
+              Full Name
+            </FormLabel>
+            <Input
+              id="full_name"
+              minLength={3}
+              {...register("full_name", { required: "Full Name is required" })}
+              placeholder="Full Name"
+              type="text"
+            />
+            {errors.full_name && (
+              <FormErrorMessage>{errors.full_name.message}</FormErrorMessage>
+            )}
+          </FormControl>
+          <FormControl id="dob" isInvalid={!!errors.dob}>
+            <FormLabel htmlFor="dob" srOnly  {...register("dob", { required: "Date of Birth is required" })}>
+              Date of Birth
+            </FormLabel>
+            <SimpleDatePicker 
+              withArrow={false} 
+              placeholder='Date of Birth' 
+              activeColor='green.500' 
+              colorSchema='green'
+              // inputProps={{w: '500px'}}  
+              closable={false}
+              onChange={(arg0?: Date) => {
+                console.log(arg0) 
+              }}
+            />
+            {errors.dob && (
+              <FormErrorMessage>{errors.dob.message}</FormErrorMessage>
+            )}
+          </FormControl>
+          <FormControl id="bioid" isInvalid={!!errors.full_name}>
+            <FormLabel htmlFor="bioid" srOnly>
+              BioID
+            </FormLabel>
+            <Input
+              id="bioid"
+              minLength={3}
+              {...register("bioid", { required: "BioID is required" })}
+              placeholder="BioID"
+              type="text"
+            />
+            {errors.bioid && (
+              <FormErrorMessage>{errors.bioid.message}</FormErrorMessage>
             )}
           </FormControl>
           <FormControl id="password" isInvalid={!!errors.password}>
@@ -146,6 +185,7 @@ function SignUp() {
               </FormErrorMessage>
             )}
           </FormControl>
+          
           <Button variant="primary" type="submit" isLoading={isSubmitting}>
             Sign Up
           </Button>

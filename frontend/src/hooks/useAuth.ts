@@ -7,8 +7,8 @@ import {
   type Body_login_login_access_token as AccessToken,
   type ApiError,
   LoginService,
-  type UserPublic,
-  type UserRegister,
+  type Dim_UserPublic,
+  type Dim_UserRegister,
   UsersService,
 } from "../client"
 import useCustomToast from "./useCustomToast"
@@ -22,14 +22,14 @@ const useAuth = () => {
   const navigate = useNavigate()
   const showToast = useCustomToast()
   const queryClient = useQueryClient()
-  const { data: user, isLoading } = useQuery<UserPublic | null, Error>({
+  const { data: user, isLoading } = useQuery<Dim_UserPublic | null, Error>({
     queryKey: ["currentUser"],
     queryFn: UsersService.readUserMe,
     enabled: isLoggedIn(),
   })
 
   const signUpMutation = useMutation({
-    mutationFn: (data: UserRegister) =>
+    mutationFn: (data: Dim_UserRegister) =>
       UsersService.registerUser({ requestBody: data }),
 
     onSuccess: () => {

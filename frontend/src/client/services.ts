@@ -8,16 +8,20 @@ import type {
   NewPassword,
   Token,
   UserPublic,
+  Dim_UserCreate,
+  Dim_UserPublic,
+  Dim_UserRegister,
+  Dim_UsersPublic,
+  Dim_UserUpdate,
+  Dim_UserUpdateMe,
   UpdatePassword,
-  UserCreate,
-  UserRegister,
-  UsersPublic,
-  UserUpdate,
-  UserUpdateMe,
   ItemCreate,
   ItemPublic,
   ItemsPublic,
   ItemUpdate,
+  Dim_PetitionCreate,
+  Dim_PetitionsPublic,
+  Dim_PetitionUpdate,
 } from "./models"
 
 export type TDataLoginAccessToken = {
@@ -139,22 +143,22 @@ export type TDataReadUsers = {
   skip?: number
 }
 export type TDataCreateUser = {
-  requestBody: UserCreate
+  requestBody: Dim_UserCreate
 }
 export type TDataUpdateUserMe = {
-  requestBody: UserUpdateMe
+  requestBody: Dim_UserUpdateMe
 }
 export type TDataUpdatePasswordMe = {
   requestBody: UpdatePassword
 }
 export type TDataRegisterUser = {
-  requestBody: UserRegister
+  requestBody: Dim_UserRegister
 }
 export type TDataReadUserById = {
   userId: string
 }
 export type TDataUpdateUser = {
-  requestBody: UserUpdate
+  requestBody: Dim_UserUpdate
   userId: string
 }
 export type TDataDeleteUser = {
@@ -165,12 +169,12 @@ export class UsersService {
   /**
    * Read Users
    * Retrieve users.
-   * @returns UsersPublic Successful Response
+   * @returns Dim_UsersPublic Successful Response
    * @throws ApiError
    */
   public static readUsers(
     data: TDataReadUsers = {},
-  ): CancelablePromise<UsersPublic> {
+  ): CancelablePromise<Dim_UsersPublic> {
     const { limit = 100, skip = 0 } = data
     return __request(OpenAPI, {
       method: "GET",
@@ -188,12 +192,12 @@ export class UsersService {
   /**
    * Create User
    * Create new user.
-   * @returns UserPublic Successful Response
+   * @returns Dim_UserPublic Successful Response
    * @throws ApiError
    */
   public static createUser(
     data: TDataCreateUser,
-  ): CancelablePromise<UserPublic> {
+  ): CancelablePromise<Dim_UserPublic> {
     const { requestBody } = data
     return __request(OpenAPI, {
       method: "POST",
@@ -209,10 +213,10 @@ export class UsersService {
   /**
    * Read User Me
    * Get current user.
-   * @returns UserPublic Successful Response
+   * @returns Dim_UserPublic Successful Response
    * @throws ApiError
    */
-  public static readUserMe(): CancelablePromise<UserPublic> {
+  public static readUserMe(): CancelablePromise<Dim_UserPublic> {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/users/me",
@@ -235,12 +239,12 @@ export class UsersService {
   /**
    * Update User Me
    * Update own user.
-   * @returns UserPublic Successful Response
+   * @returns Dim_UserPublic Successful Response
    * @throws ApiError
    */
   public static updateUserMe(
     data: TDataUpdateUserMe,
-  ): CancelablePromise<UserPublic> {
+  ): CancelablePromise<Dim_UserPublic> {
     const { requestBody } = data
     return __request(OpenAPI, {
       method: "PATCH",
@@ -277,12 +281,12 @@ export class UsersService {
   /**
    * Register User
    * Create new user without the need to be logged in.
-   * @returns UserPublic Successful Response
+   * @returns Dim_UserPublic Successful Response
    * @throws ApiError
    */
   public static registerUser(
     data: TDataRegisterUser,
-  ): CancelablePromise<UserPublic> {
+  ): CancelablePromise<Dim_UserPublic> {
     const { requestBody } = data
     return __request(OpenAPI, {
       method: "POST",
@@ -298,12 +302,12 @@ export class UsersService {
   /**
    * Read User By Id
    * Get a specific user by id.
-   * @returns UserPublic Successful Response
+   * @returns Dim_UserPublic Successful Response
    * @throws ApiError
    */
   public static readUserById(
     data: TDataReadUserById,
-  ): CancelablePromise<UserPublic> {
+  ): CancelablePromise<Dim_UserPublic> {
     const { userId } = data
     return __request(OpenAPI, {
       method: "GET",
@@ -320,12 +324,12 @@ export class UsersService {
   /**
    * Update User
    * Update a user.
-   * @returns UserPublic Successful Response
+   * @returns Dim_UserPublic Successful Response
    * @throws ApiError
    */
   public static updateUser(
     data: TDataUpdateUser,
-  ): CancelablePromise<UserPublic> {
+  ): CancelablePromise<Dim_UserPublic> {
     const { requestBody, userId } = data
     return __request(OpenAPI, {
       method: "PATCH",
