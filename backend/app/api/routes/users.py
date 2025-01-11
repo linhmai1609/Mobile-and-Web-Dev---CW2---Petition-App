@@ -16,13 +16,13 @@ from app.models import (
     Item,
     Message,
     UpdatePassword,
-    User,
-    UserCreate,
-    UserPublic,
-    UserRegister,
-    UsersPublic,
-    UserUpdate,
-    UserUpdateMe,
+    Dim_User,
+    Dim_UserCreate,
+    Dim_UserPublic,
+    Dim_UserRegister,
+    Dim_UsersPublic,
+    Dim_UserUpdate,
+    Dim_UserUpdateMe,
 )
 from app.utils import generate_new_account_email, send_email
 
@@ -32,26 +32,26 @@ router = APIRouter()
 @router.get(
     "/",
     dependencies=[Depends(get_current_active_superuser)],
-    response_model=UsersPublic,
+    response_model=Dim_UsersPublic,
 )
 def read_users(session: SessionDep, skip: int = 0, limit: int = 100) -> Any:
     """
     Retrieve users.
     """
 
-    count_statement = select(func.count()).select_from(User)
+    count_statement = select(func.count()).select_from(Dim_User)
     count = session.exec(count_statement).one()
 
-    statement = select(User).offset(skip).limit(limit)
+    statement = select(Dim_User).offset(skip).limit(limit)
     users = session.exec(statement).all()
 
-    return UsersPublic(data=users, count=count)
+    return Dim_UsersPublic(data=users, count=count)
 
 
 @router.post(
-    "/", dependencies=[Depends(get_current_active_superuser)], response_model=UserPublic
+    "/", dependencies=[Depends(get_current_active_superuser)], response_model=Dim_UserPublic
 )
-def create_user(*, session: SessionDep, user_in: UserCreate) -> Any:
+def create_user(*, session: SessionDep, user_in: Dim_UserCreate) -> Any:
     """
     Create new user.
     """
@@ -75,9 +75,9 @@ def create_user(*, session: SessionDep, user_in: UserCreate) -> Any:
     return user
 
 
-@router.patch("/me", response_model=UserPublic)
+@router.patch("/me", response_model=Dim_UserPublic)
 def update_user_me(
-    *, session: SessionDep, user_in: UserUpdateMe, current_user: CurrentUser
+    *, session: SessionDep, user_in: Dim_UserUpdateMe, current_user: CurrentUser
 ) -> Any:
     """
     Update own user.
@@ -117,7 +117,7 @@ def update_password_me(
     return Message(message="Password updated successfully")
 
 
-@router.get("/me", response_model=UserPublic)
+@router.get("/me", response_model=Dim_UserPublic)
 def read_user_me(current_user: CurrentUser) -> Any:
     """
     Get current user.
@@ -141,8 +141,8 @@ def delete_user_me(session: SessionDep, current_user: CurrentUser) -> Any:
     return Message(message="User deleted successfully")
 
 
-@router.post("/signup", response_model=UserPublic)
-def register_user(session: SessionDep, user_in: UserRegister) -> Any:
+@router.post("/signup", response_model=Dim_UserPublic)
+def register_user(session: SessionDep, user_in: Dim_UserRegister) -> Any:
     """
     Create new user without the need to be logged in.
     """
@@ -152,19 +152,19 @@ def register_user(session: SessionDep, user_in: UserRegister) -> Any:
             status_code=400,
             detail="The user with this email already exists in the system",
         )
-    user_create = UserCreate.model_validate(user_in)
+    user_create = Dim_UserCreate.model_validate(user_in)
     user = crud.create_user(session=session, user_create=user_create)
     return user
 
 
-@router.get("/{user_id}", response_model=UserPublic)
+@router.get("/{user_id}", response_model=Dim_UserPublic)
 def read_user_by_id(
     user_id: uuid.UUID, session: SessionDep, current_user: CurrentUser
 ) -> Any:
     """
     Get a specific user by id.
     """
-    user = session.get(User, user_id)
+    user = session.get(Dim_User, user_id)
     if user == current_user:
         return user
     if not current_user.is_superuser:
@@ -178,19 +178,19 @@ def read_user_by_id(
 @router.patch(
     "/{user_id}",
     dependencies=[Depends(get_current_active_superuser)],
-    response_model=UserPublic,
+    response_model=Dim_UserPublic,
 )
 def update_user(
     *,
     session: SessionDep,
     user_id: uuid.UUID,
-    user_in: UserUpdate,
+    user_in: Dim_UserUpdate,
 ) -> Any:
     """
     Update a user.
     """
 
-    db_user = session.get(User, user_id)
+    db_user = session.get(Dim_User, user_id)
     if not db_user:
         raise HTTPException(
             status_code=404,
@@ -214,7 +214,7 @@ def delete_user(
     """
     Delete a user.
     """
-    user = session.get(User, user_id)
+    user = session.get(Dim_User, user_id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     if user == current_user:
