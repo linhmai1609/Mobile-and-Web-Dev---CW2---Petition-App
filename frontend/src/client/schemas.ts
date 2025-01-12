@@ -123,12 +123,6 @@ export const $Dim_PetitionPrivate = {
         },
       ],
     },
-    petitioner: {
-      type: "string",
-      isRequired: true,
-      format: "email",
-      maxLength: 255,
-    },
     response: {
       type: "any-of",
       contains: [
@@ -177,12 +171,6 @@ export const $Dim_PetitionPublic = {
           type: "null",
         },
       ],
-    },
-    petitioner: {
-      type: "string",
-      isRequired: true,
-      format: "email",
-      maxLength: 255,
     },
     response: {
       type: "any-of",
@@ -236,12 +224,6 @@ export const $Dim_PetitionPublicMe = {
           type: "null",
         },
       ],
-    },
-    petitioner: {
-      type: "string",
-      isRequired: true,
-      format: "email",
-      maxLength: 255,
     },
     response: {
       type: "any-of",
@@ -299,12 +281,6 @@ export const $Dim_PetitionUpdate = {
           type: "null",
         },
       ],
-    },
-    petitioner: {
-      type: "string",
-      isRequired: true,
-      format: "email",
-      maxLength: 255,
     },
     response: {
       type: "any-of",
@@ -593,6 +569,64 @@ export const $Dim_UsersPublic = {
     count: {
       type: "number",
       isRequired: true,
+    },
+  },
+} as const
+
+export const $Facts_Petition = {
+  properties: {
+    action: {
+      type: "string",
+      isRequired: true,
+      maxLength: 255,
+      minLength: 1,
+    },
+    message: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    id: {
+      type: "string",
+      format: "uuid",
+    },
+    petition_id: {
+      type: "string",
+      isRequired: true,
+      format: "uuid",
+    },
+    petition_affector_id: {
+      type: "string",
+      isRequired: true,
+      format: "uuid",
+    },
+  },
+} as const
+
+export const $Facts_PetitionCreate = {
+  properties: {
+    action: {
+      type: "string",
+      isRequired: true,
+      maxLength: 255,
+      minLength: 1,
+    },
+    message: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
     },
   },
 } as const

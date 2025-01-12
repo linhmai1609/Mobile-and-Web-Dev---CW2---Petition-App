@@ -18,7 +18,6 @@ export type Dim_PetitionPrivate = {
   status: string
   petition_title?: string | null
   petition_text?: string | null
-  petitioner: string
   response?: string | null
   id: string
 }
@@ -27,7 +26,6 @@ export type Dim_PetitionPublic = {
   status: string
   petition_title?: string | null
   petition_text?: string | null
-  petitioner: string
   response?: string | null
   id: string
   signatures: number
@@ -37,7 +35,6 @@ export type Dim_PetitionPublicMe = {
   status: string
   petition_title?: string | null
   petition_text?: string | null
-  petitioner: string
   response?: string | null
   id: string
   signatures: number
@@ -48,7 +45,6 @@ export type Dim_PetitionUpdate = {
   status: string
   petition_title?: string | null
   petition_text?: string | null
-  petitioner: string
   response?: string | null
 }
 
@@ -103,6 +99,19 @@ export type Dim_UserUpdateMe = {
 export type Dim_UsersPublic = {
   data: Array<UserPublic>
   count: number
+}
+
+export type Facts_Petition = {
+  action: string
+  message?: string | null
+  id?: string
+  petition_id: string
+  petition_affector_id: string
+}
+
+export type Facts_PetitionCreate = {
+  action: string
+  message?: string | null
 }
 
 export type HTTPValidationError = {

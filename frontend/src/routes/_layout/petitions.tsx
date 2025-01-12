@@ -14,6 +14,7 @@ import {
   StackDivider,
   Spinner,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
@@ -23,6 +24,7 @@ import { z } from "zod"
 import { PetitionsService } from "../../client"
 import Navbar from "../../components/Common/Navbar"
 import AddPetition from "../../components/Petitions/AddPetition"
+import VotePetition from "../../components/Petitions/VotePetition"
 
 const itemsSearchSchema = z.object({
   page: z.number().catch(1),
@@ -44,6 +46,10 @@ function getPetitionsQueryOptions({ page }: { page: number }) {
 }
 
 function PetitionsList() {
+  const {
+    isOpen, onOpen,
+    onClose
+} = useDisclosure();
   const queryClient = useQueryClient()
   const { page } = Route.useSearch()
   const navigate = useNavigate({ from: Route.fullPath })
@@ -86,7 +92,7 @@ function PetitionsList() {
                 <AccordionItem >
                 <h2>
                   <AccordionButton>
-                    <Box as='span' flex='1' textAlign='left'>
+                    <Box textAlign='left' shadow="md">
                       {petition.petition_title?.toUpperCase()}
                     </Box>
                     <AccordionIcon />
@@ -121,11 +127,18 @@ function PetitionsList() {
                             <Text > {petition.response} </Text>
                           </HStack>
                       </Box>
-                      <Container>
-                        <Button isDisabled={petition.action === 'NOT_SIGNED'}>
+                      <Box>
+                        <HStack>
+                            <Text as='u'>Signature(s): </Text>
+                            <Text > {petition.signatures} </Text>
+                          </HStack>
+                      </Box>
+                      <Box>
+                        <Button onClick={onOpen} isDisabled={petition.action === "SIGNED"}>
                             Vote
                         </Button>
-                      </Container>
+                        <VotePetition petition={petition} isOpen={isOpen} onClose={onClose}></VotePetition>
+                      </Box>
                   </VStack>
                 </AccordionPanel>
               </AccordionItem>

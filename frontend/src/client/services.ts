@@ -24,6 +24,8 @@ import type {
   Dim_PetitionPrivate,
   Dim_PetitionsPublicMe,
   Dim_PetitionUpdate,
+  Facts_Petition,
+  Facts_PetitionCreate,
 } from "./models"
 
 export type TDataLoginAccessToken = {
@@ -550,6 +552,10 @@ export type TDataUpdatePetition = {
   id: string
   requestBody: Dim_PetitionUpdate
 }
+export type TDataVotePetition = {
+  id: string
+  requestBody: Facts_PetitionCreate
+}
 
 export class PetitionsService {
   /**
@@ -632,6 +638,30 @@ export class PetitionsService {
     return __request(OpenAPI, {
       method: "PUT",
       url: "/api/v1/slpp/petitions/{id}",
+      path: {
+        id,
+      },
+      body: requestBody,
+      mediaType: "application/json",
+      errors: {
+        422: `Validation Error`,
+      },
+    })
+  }
+
+  /**
+   * Create Item
+   * Vote a petition.
+   * @returns Facts_Petition Successful Response
+   * @throws ApiError
+   */
+  public static votePetition(
+    data: TDataVotePetition,
+  ): CancelablePromise<Facts_Petition> {
+    const { id, requestBody } = data
+    return __request(OpenAPI, {
+      method: "POST",
+      url: "/api/v1/slpp/petitions/vote/{id}",
       path: {
         id,
       },
