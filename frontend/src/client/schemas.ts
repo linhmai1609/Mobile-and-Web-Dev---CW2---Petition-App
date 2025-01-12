@@ -49,6 +49,554 @@ export const $Body_login_login_access_token = {
   },
 } as const
 
+export const $Dim_PetitionCreate = {
+  properties: {
+    status: {
+      type: "string",
+      isRequired: true,
+      maxLength: 255,
+      minLength: 1,
+    },
+    petition_title: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    petition_text: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    response: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+  },
+} as const
+
+export const $Dim_PetitionPrivate = {
+  properties: {
+    status: {
+      type: "string",
+      isRequired: true,
+      maxLength: 255,
+      minLength: 1,
+    },
+    petition_title: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    petition_text: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    petitioner: {
+      type: "string",
+      isRequired: true,
+      format: "email",
+      maxLength: 255,
+    },
+    response: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    id: {
+      type: "string",
+      isRequired: true,
+      format: "uuid",
+    },
+  },
+} as const
+
+export const $Dim_PetitionPublic = {
+  properties: {
+    status: {
+      type: "string",
+      isRequired: true,
+      maxLength: 255,
+      minLength: 1,
+    },
+    petition_title: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    petition_text: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    petitioner: {
+      type: "string",
+      isRequired: true,
+      format: "email",
+      maxLength: 255,
+    },
+    response: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    id: {
+      type: "string",
+      isRequired: true,
+      format: "uuid",
+    },
+    signatures: {
+      type: "number",
+      isRequired: true,
+    },
+  },
+} as const
+
+export const $Dim_PetitionPublicMe = {
+  properties: {
+    status: {
+      type: "string",
+      isRequired: true,
+      maxLength: 255,
+      minLength: 1,
+    },
+    petition_title: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    petition_text: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    petitioner: {
+      type: "string",
+      isRequired: true,
+      format: "email",
+      maxLength: 255,
+    },
+    response: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    id: {
+      type: "string",
+      isRequired: true,
+      format: "uuid",
+    },
+    signatures: {
+      type: "number",
+      isRequired: true,
+    },
+    action: {
+      type: "string",
+      isRequired: true,
+    },
+  },
+} as const
+
+export const $Dim_PetitionUpdate = {
+  properties: {
+    status: {
+      type: "string",
+      isRequired: true,
+      maxLength: 255,
+      minLength: 1,
+    },
+    petition_title: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    petition_text: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    petitioner: {
+      type: "string",
+      isRequired: true,
+      format: "email",
+      maxLength: 255,
+    },
+    response: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+  },
+} as const
+
+export const $Dim_PetitionsPublic = {
+  properties: {
+    petitions: {
+      type: "array",
+      contains: {
+        type: "Dim_PetitionPublic",
+      },
+      isRequired: true,
+    },
+  },
+} as const
+
+export const $Dim_PetitionsPublicMe = {
+  properties: {
+    petitions: {
+      type: "array",
+      contains: {
+        type: "Dim_PetitionPublicMe",
+      },
+      isRequired: true,
+    },
+  },
+} as const
+
+export const $Dim_UserCreate = {
+  properties: {
+    email: {
+      type: "string",
+      isRequired: true,
+      format: "email",
+      maxLength: 255,
+    },
+    full_name: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+          maxLength: 255,
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    dob: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+          format: "date",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    is_active: {
+      type: "boolean",
+      default: true,
+    },
+    is_superuser: {
+      type: "boolean",
+      default: false,
+    },
+    password: {
+      type: "string",
+      isRequired: true,
+      maxLength: 40,
+      minLength: 8,
+    },
+  },
+} as const
+
+export const $Dim_UserPublic = {
+  properties: {
+    email: {
+      type: "string",
+      isRequired: true,
+      format: "email",
+      maxLength: 255,
+    },
+    full_name: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+          maxLength: 255,
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    dob: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+          format: "date",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    is_active: {
+      type: "boolean",
+      default: true,
+    },
+    is_superuser: {
+      type: "boolean",
+      default: false,
+    },
+    id: {
+      type: "string",
+      isRequired: true,
+      format: "uuid",
+    },
+  },
+} as const
+
+export const $Dim_UserRegister = {
+  properties: {
+    email: {
+      type: "string",
+      isRequired: true,
+      format: "email",
+      maxLength: 255,
+    },
+    full_name: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+          maxLength: 255,
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    dob: {
+      type: "string",
+      isRequired: true,
+      format: "date",
+    },
+    bioid: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+          maxLength: 10,
+        },
+        {
+          type: "null",
+        },
+      ],
+      isRequired: true,
+    },
+    password: {
+      type: "string",
+      isRequired: true,
+      maxLength: 40,
+      minLength: 8,
+    },
+  },
+} as const
+
+export const $Dim_UserUpdate = {
+  properties: {
+    email: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+          format: "email",
+          maxLength: 255,
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    full_name: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+          maxLength: 255,
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    dob: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+          format: "date",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    is_active: {
+      type: "boolean",
+      default: true,
+    },
+    is_superuser: {
+      type: "boolean",
+      default: false,
+    },
+    password: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+          maxLength: 40,
+          minLength: 8,
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+  },
+} as const
+
+export const $Dim_UserUpdateMe = {
+  properties: {
+    full_name: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+          maxLength: 255,
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    email: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+          format: "email",
+          maxLength: 255,
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+  },
+} as const
+
+export const $Dim_UsersPublic = {
+  properties: {
+    data: {
+      type: "array",
+      contains: {
+        type: "UserPublic",
+      },
+      isRequired: true,
+    },
+    count: {
+      type: "number",
+      isRequired: true,
+    },
+  },
+} as const
+
 export const $HTTPValidationError = {
   properties: {
     detail: {
@@ -143,6 +691,18 @@ export const $ItemUpdate = {
         },
       ],
     },
+    current_password: {
+      type: "string",
+      isRequired: true,
+      maxLength: 40,
+      minLength: 8,
+    },
+    new_password: {
+      type: "string",
+      isRequired: true,
+      maxLength: 40,
+      minLength: 8,
+    },
   },
 } as const
 
@@ -216,43 +776,6 @@ export const $UpdatePassword = {
   },
 } as const
 
-export const $UserCreate = {
-  properties: {
-    email: {
-      type: "string",
-      isRequired: true,
-      format: "email",
-      maxLength: 255,
-    },
-    is_active: {
-      type: "boolean",
-      default: true,
-    },
-    is_superuser: {
-      type: "boolean",
-      default: false,
-    },
-    full_name: {
-      type: "any-of",
-      contains: [
-        {
-          type: "string",
-          maxLength: 255,
-        },
-        {
-          type: "null",
-        },
-      ],
-    },
-    password: {
-      type: "string",
-      isRequired: true,
-      maxLength: 40,
-      minLength: 8,
-    },
-  },
-} as const
-
 export const $UserPublic = {
   properties: {
     email: {
@@ -285,132 +808,6 @@ export const $UserPublic = {
       type: "string",
       isRequired: true,
       format: "uuid",
-    },
-  },
-} as const
-
-export const $UserRegister = {
-  properties: {
-    email: {
-      type: "string",
-      isRequired: true,
-      format: "email",
-      maxLength: 255,
-    },
-    password: {
-      type: "string",
-      isRequired: true,
-      maxLength: 40,
-      minLength: 8,
-    },
-    full_name: {
-      type: "any-of",
-      contains: [
-        {
-          type: "string",
-          maxLength: 255,
-        },
-        {
-          type: "null",
-        },
-      ],
-    },
-  },
-} as const
-
-export const $UserUpdate = {
-  properties: {
-    email: {
-      type: "any-of",
-      contains: [
-        {
-          type: "string",
-          format: "email",
-          maxLength: 255,
-        },
-        {
-          type: "null",
-        },
-      ],
-    },
-    is_active: {
-      type: "boolean",
-      default: true,
-    },
-    is_superuser: {
-      type: "boolean",
-      default: false,
-    },
-    full_name: {
-      type: "any-of",
-      contains: [
-        {
-          type: "string",
-          maxLength: 255,
-        },
-        {
-          type: "null",
-        },
-      ],
-    },
-    password: {
-      type: "any-of",
-      contains: [
-        {
-          type: "string",
-          maxLength: 40,
-          minLength: 8,
-        },
-        {
-          type: "null",
-        },
-      ],
-    },
-  },
-} as const
-
-export const $UserUpdateMe = {
-  properties: {
-    full_name: {
-      type: "any-of",
-      contains: [
-        {
-          type: "string",
-          maxLength: 255,
-        },
-        {
-          type: "null",
-        },
-      ],
-    },
-    email: {
-      type: "any-of",
-      contains: [
-        {
-          type: "string",
-          format: "email",
-          maxLength: 255,
-        },
-        {
-          type: "null",
-        },
-      ],
-    },
-  },
-} as const
-
-export const $UsersPublic = {
-  properties: {
-    data: {
-      type: "array",
-      contains: {
-        type: "UserPublic",
-      },
-      isRequired: true,
-    },
-    count: {
-      type: "number",
-      isRequired: true,
     },
   },
 } as const

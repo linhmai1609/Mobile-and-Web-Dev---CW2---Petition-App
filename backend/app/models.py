@@ -125,12 +125,14 @@ class Dim_PetitionBase(SQLModel):
     status: str = Field(min_length=1, max_length=255)
     petition_title: str | None = Field(default=None)
     petition_text: str | None = Field(default=None)
-    petitioner: EmailStr = Field(max_length=255)
     response: str | None = Field(default=None)
 
 # Database model, database table inferred from class name
 class Dim_Petition(Dim_PetitionBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    petitioner: uuid.UUID = Field(
+        foreign_key="dim_user.id", nullable=False, ondelete="CASCADE"
+    )
     # created_at: float = Field(default=datetime.datetime.now().replace(tzinfo=datetime.timezone.utc).timestamp())
     # updated_at: float = Field(default=datetime.datetime.now().replace(tzinfo=datetime.timezone.utc).timestamp())
     # facts: list["Facts_Petition"] = Relationship(back_populates="facts_petition")
@@ -145,13 +147,33 @@ class Dim_PetitionPublic(Dim_PetitionBase):
     # response: str | None = Field(default=None)
     signatures: int
 
+class Dim_PetitionPrivate(Dim_PetitionBase):
+    id: uuid.UUID
+
+class Dim_PetitionPublicMe(Dim_PetitionBase):
+    id: uuid.UUID
+    # status: str = Field(min_length=1, max_length=255)
+    # petition_title: str | None = Field(default=None)
+    # petition_text: str | None = Field(default=None)
+    # petitioner: EmailStr = Field(max_length=255)
+    # response: str | None = Field(default=None)
+    signatures: int
+    action: str
+
 class Dim_PetitionsPublic(SQLModel):
     petitions: list[Dim_PetitionPublic]
 
-# Properties to receive on item creation
+class Dim_PetitionsPublicMe(SQLModel):
+    petitions: list[Dim_PetitionPublicMe]
+
+# Properties to receive on petition creation
 class Dim_PetitionCreate(Dim_PetitionBase):
     pass
 
+# Properties to receive on petition update
+class Dim_PetitionUpdate(Dim_PetitionBase):
+    status: str = Field(min_length=1, max_length=255)
+    response: str | None = Field(default=None)
 
 # ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Dim_BioID
@@ -204,7 +226,8 @@ class Dim_UserUpdateMe(SQLModel):
     full_name: str | None = Field(default=None, max_length=255)
     email: EmailStr | None = Field(default=None, max_length=255)
 
-class Dim_UpdatePassword(SQLModel):
+class ItemUpdate(ItemBase):
+    title: str | None = Field(default=None, min_length=1, max_length=255)  # type: ignoreclass Dim_UpdatePassword(SQLModel):
     current_password: str = Field(min_length=8, max_length=40)
     new_password: str = Field(min_length=8, max_length=40)
 

@@ -20,7 +20,9 @@ import type {
   ItemsPublic,
   ItemUpdate,
   Dim_PetitionCreate,
-  Dim_PetitionsPublic,
+  Dim_PetitionPublic,
+  Dim_PetitionPrivate,
+  Dim_PetitionsPublicMe,
   Dim_PetitionUpdate,
 } from "./models"
 
@@ -525,6 +527,116 @@ export class ItemsService {
       path: {
         id,
       },
+      errors: {
+        422: `Validation Error`,
+      },
+    })
+  }
+}
+
+export type TDataReadPetitions = {
+  limit?: number
+  skip?: number
+  status?: string
+}
+export type TDataCreatePetition = {
+  requestBody: Dim_PetitionCreate
+}
+
+export type TDataReadPetition = {
+  id: string
+}
+export type TDataUpdatePetition = {
+  id: string
+  requestBody: Dim_PetitionUpdate
+}
+
+export class PetitionsService {
+  /**
+   * Read Items
+   * Retrieve petitions for current user.
+   * @returns Dim_PetitionsPublicMe Successful Response
+   * @throws ApiError
+   */
+  public static readPetitions(
+    data: TDataReadPetitions = {},
+  ): CancelablePromise<Dim_PetitionsPublicMe> {
+    const { limit = 100, skip = 0, status = "" } = data
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/slpp/petitions/me",
+      query: {
+        status,
+        skip,
+        limit,
+      },
+      errors: {
+        422: `Validation Error`,
+      },
+    })
+  }
+
+  /**
+   * Create Item
+   * Create new Petition.
+   * @returns Dim_PetitionPrivate Successful Response
+   * @throws ApiError
+   */
+  public static createPetition(
+    data: TDataCreatePetition,
+  ): CancelablePromise<Dim_PetitionPrivate> {
+    const { requestBody } = data
+    return __request(OpenAPI, {
+      method: "POST",
+      url: "/api/v1/slpp/petitions/",
+      body: requestBody,
+      mediaType: "application/json",
+      errors: {
+        422: `Validation Error`,
+      },
+    })
+  }
+
+  /**
+   * Read Item
+   * Get petition by ID.
+   * @returns Dim_PetitionsPublic Successful Response
+   * @throws ApiError
+   */
+  public static readPetition(
+    data: TDataReadPetition,
+  ): CancelablePromise<Dim_PetitionPublic> {
+    const { id } = data
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/slpp/petitions/{id}",
+      path: {
+        id,
+      },
+      errors: {
+        422: `Validation Error`,
+      },
+    })
+  }
+
+  /**
+   * Update Item
+   * Update a petition's comment and status.
+   * @returns Dim_PetitionPrivate Successful Response
+   * @throws ApiError
+   */
+  public static updatePetition(
+    data: TDataUpdatePetition,
+  ): CancelablePromise<Dim_PetitionPrivate> {
+    const { id, requestBody } = data
+    return __request(OpenAPI, {
+      method: "PUT",
+      url: "/api/v1/slpp/petitions/{id}",
+      path: {
+        id,
+      },
+      body: requestBody,
+      mediaType: "application/json",
       errors: {
         422: `Validation Error`,
       },
