@@ -10,9 +10,6 @@ import {
   Link,
   Text,
 } from "@chakra-ui/react"
-import { 
-  SimpleDatePicker
-} from 'simple-chakra-ui-datepicker';
 import {
   Link as RouterLink,
   createFileRoute,
@@ -118,19 +115,15 @@ function SignUp() {
             )}
           </FormControl>
           <FormControl id="dob" isInvalid={!!errors.dob}>
-            <FormLabel htmlFor="dob" srOnly  {...register("dob", { required: "Date of Birth is required" })}>
+            <FormLabel htmlFor="dob" srOnly >
               Date of Birth
             </FormLabel>
-            <SimpleDatePicker 
-              withArrow={false} 
-              placeholder='Date of Birth' 
-              activeColor='green.500' 
-              colorSchema='green'
-              // inputProps={{w: '500px'}}  
-              closable={false}
-              onChange={(arg0?: Date) => {
-                console.log(arg0) 
-              }}
+            <Input
+              id="dob"
+              type='date'
+              minLength={3}
+              {...register("dob", { required: "Date of Birth is required" })}
+              placeholder="Date of Birth"
             />
             {errors.dob && (
               <FormErrorMessage>{errors.dob.message}</FormErrorMessage>
