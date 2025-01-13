@@ -14,6 +14,7 @@ from app.models import (
     , Dim_PetitionCreate
     , Dim_PetitionUpdate
     , Dim_PetitionPrivate
+    , Dim_PetitionThreshold
     , Message
     , Facts_Petition
     , Facts_PetitionCreate
@@ -125,6 +126,7 @@ def read_items(
             , petitioner=petition.petitioner
             , response=petition.response
             , signatures=petition.signatures
+            , vote_threshold=petition.vote_threshold
             , action=petition.action
         )
         petition_modelised.append(tmp)
@@ -152,14 +154,16 @@ def create_item(
     """
     Create new Petition.
     """
-    petition = Dim_Petition.model_validate(petition_in, update={"petitioner": current_user.id})
+    threshold = session.get(Dim_PetitionThreshold, "1")
+
+    petition = Dim_Petition.model_validate(petition_in, update={"petitioner": current_user.email, "vote_threshold": threshold.vote_threshold})
     session.add(petition)
     session.commit()
     session.refresh(petition)
     return petition
 
 
-@router.put("/{id}", response_model=Dim_PetitionPrivate)
+@router.patch("/{id}", response_model=Dim_PetitionPrivate)
 def update_item(
     *,
     session: SessionDep,
@@ -208,3 +212,40 @@ def update_item(
     session.commit()
     session.refresh(voting_fact)
     return voting_fact
+
+@router.post("/threshold")
+def update_item(
+    *,
+    session: SessionDep,
+    current_user: CurrentUser,
+    threshold: int,
+) -> Message:
+    """
+    Update all open petition's vote threshold
+    """
+    if not current_user.is_superuser:
+        raise HTTPException(status_code=400, detail="Not enough permissions")
+    
+    threshold_data = session.get(Dim_PetitionThreshold, "1")
+
+    threshold_data.vote_threshold = threshold
+
+    session.add(threshold_data)
+    session.commit()
+    session.refresh(threshold_data)
+    
+    petition_statement = (
+        select(Dim_Petition)
+        .where(Dim_Petition.status == "open")
+    )
+    petitions = session.exec(petition_statement).all()
+
+    for petition in petitions:
+        petition.vote_threshold = threshold
+        session.add(petition)
+        session.commit()
+        session.refresh(petition)
+
+    return Message(message="Vote threshold update successfully")
+    
+    

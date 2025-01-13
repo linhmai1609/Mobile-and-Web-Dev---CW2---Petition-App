@@ -24,6 +24,7 @@ import type {
   Dim_PetitionPrivate,
   Dim_PetitionsPublicMe,
   Dim_PetitionUpdate,
+  Dim_PetitionPublicMe,
   Facts_Petition,
   Facts_PetitionCreate,
 } from "./models"
@@ -551,6 +552,10 @@ export type TDataReadPetition = {
 export type TDataUpdatePetition = {
   id: string
   requestBody: Dim_PetitionUpdate
+  addons: Dim_PetitionPublicMe
+}
+export type TDataUpdatePetitionThreshold = {
+  threshold: number
 }
 export type TDataVotePetition = {
   id: string
@@ -634,15 +639,43 @@ export class PetitionsService {
   public static updatePetition(
     data: TDataUpdatePetition,
   ): CancelablePromise<Dim_PetitionPrivate> {
-    const { id, requestBody } = data
+    const { id, requestBody, addons} = data
     return __request(OpenAPI, {
-      method: "PUT",
+      method: "PATCH",
       url: "/api/v1/slpp/petitions/{id}",
       path: {
         id,
       },
-      body: requestBody,
+      body: {
+        "status": requestBody.status,
+        "petition_title": addons.petition_title,
+        "petition_text": addons.petition_text,
+        "response": requestBody.response,
+        "vote_threshold": addons.vote_threshold
+      },
       mediaType: "application/json",
+      errors: {
+        422: `Validation Error`,
+      },
+    })
+  }
+
+  /**
+   * Update Item
+   * Update all open petition's vote threshold
+   * @returns Message Successful Response
+   * @throws ApiError
+   */
+  public static updateThreshold(
+    data: TDataUpdatePetitionThreshold,
+  ): CancelablePromise<Message> {
+    const { threshold } = data
+    return __request(OpenAPI, {
+      method: "POST",
+      url: "/api/v1/slpp/petitions/threshold",
+      query: {
+        threshold,
+      },
       errors: {
         422: `Validation Error`,
       },

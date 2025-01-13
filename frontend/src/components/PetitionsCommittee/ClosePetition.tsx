@@ -15,16 +15,17 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { type SubmitHandler, useForm } from "react-hook-form"
 
-import { type ApiError, type Dim_PetitionCreate, PetitionsService } from "../../client"
+import { type ApiError, type Dim_PetitionPublicMe, type Dim_PetitionUpdate, PetitionsService } from "../../client"
 import useCustomToast from "../../hooks/useCustomToast"
 import { handleError } from "../../utils"
 
-interface AddPetitionProps {
+interface ClosePetitionProps {
+  petition: Dim_PetitionPublicMe
   isOpen: boolean
   onClose: () => void
 }
 
-const AddPetition = ({ isOpen, onClose }: AddPetitionProps) => {
+const ClosePetition = ({petition, isOpen, onClose }: ClosePetitionProps) => {
   const queryClient = useQueryClient()
   const showToast = useCustomToast()
   const {
@@ -32,23 +33,20 @@ const AddPetition = ({ isOpen, onClose }: AddPetitionProps) => {
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<Dim_PetitionCreate>({
+  } = useForm<Dim_PetitionUpdate>({
     mode: "onBlur",
     criteriaMode: "all",
     defaultValues: {
-      status: "open",
-      petition_title: "",
-      petition_text: "",
+      status: "closed",
       response: "",
-      vote_threshold: 0
     },
   })
 
   const mutation = useMutation({
-    mutationFn: (data: Dim_PetitionCreate) =>
-      PetitionsService.createPetition({ requestBody: data }),
+    mutationFn: (data: Dim_PetitionUpdate) =>
+      PetitionsService.updatePetition({ id: petition.id, requestBody: data, addons: petition}),
     onSuccess: () => {
-      showToast("Success!", "Petition created successfully.", "success")
+      showToast("Success!", "Petition closed successfully.", "success")
       reset()
       onClose()
     },
@@ -60,7 +58,7 @@ const AddPetition = ({ isOpen, onClose }: AddPetitionProps) => {
     },
   })
 
-  const onSubmit: SubmitHandler<Dim_PetitionCreate> = (data) => {
+  const onSubmit: SubmitHandler<Dim_PetitionUpdate> = (data) => {
     mutation.mutate(data)
   }
 
@@ -74,37 +72,28 @@ const AddPetition = ({ isOpen, onClose }: AddPetitionProps) => {
       >
         <ModalOverlay />
         <ModalContent as="form" onSubmit={handleSubmit(onSubmit)}>
-          <ModalHeader>Add Petition</ModalHeader>
+          <ModalHeader>Response And Close Petition</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <FormControl isRequired isInvalid={!!errors.petition_title}>
-              <FormLabel htmlFor="petition_title">Title</FormLabel>
+            <FormControl isRequired isInvalid={!!errors.response}>
+              <FormLabel htmlFor="response">Title</FormLabel>
               <Input
-                id="petition_title"
-                {...register("petition_title", {
-                  required: "Title is required.",
+                id="response"
+                {...register("response", {
+                  required: "Respond is required.",
                 })}
-                placeholder="Title"
+                placeholder="Respond"
                 type="text"
               />
-              {errors.petition_title && (
-                <FormErrorMessage>{errors.petition_title.message}</FormErrorMessage>
+              {errors.response && (
+                <FormErrorMessage>{errors.response.message}</FormErrorMessage>
               )}
-            </FormControl>
-            <FormControl mt={4}>
-              <FormLabel htmlFor="description">Description</FormLabel>
-              <Input
-                id="petition_text"
-                {...register("petition_text")}
-                placeholder="Description"
-                type="text"
-              />
             </FormControl>
           </ModalBody>
 
           <ModalFooter gap={3}>
             <Button variant="primary" type="submit" isLoading={isSubmitting}>
-              Save
+              Save Respond And Close Petition
             </Button>
             <Button onClick={onClose}>Cancel</Button>
           </ModalFooter>
@@ -114,4 +103,4 @@ const AddPetition = ({ isOpen, onClose }: AddPetitionProps) => {
   )
 }
 
-export default AddPetition
+export default ClosePetition

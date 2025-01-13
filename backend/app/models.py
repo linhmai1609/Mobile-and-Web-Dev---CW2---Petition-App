@@ -126,25 +126,26 @@ class Dim_PetitionBase(SQLModel):
     petition_title: str | None = Field(default=None)
     petition_text: str | None = Field(default=None)
     response: str | None = Field(default=None)
-
+    vote_threshold: int 
+    
 # Database model, database table inferred from class name
 class Dim_Petition(Dim_PetitionBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    petitioner: uuid.UUID = Field(
-        foreign_key="dim_user.id", nullable=False, ondelete="CASCADE"
+    petitioner: EmailStr = Field(
+        foreign_key="dim_user.email", nullable=False
     )
     # created_at: float = Field(default=datetime.datetime.now().replace(tzinfo=datetime.timezone.utc).timestamp())
     # updated_at: float = Field(default=datetime.datetime.now().replace(tzinfo=datetime.timezone.utc).timestamp())
     # facts: list["Facts_Petition"] = Relationship(back_populates="facts_petition")
 
 # Properties to return via API, id is always required
-class Dim_PetitionPublic(Dim_PetitionBase):
+class Dim_PetitionPublic(SQLModel):
     id: uuid.UUID
-    # status: str = Field(min_length=1, max_length=255)
-    # petition_title: str | None = Field(default=None)
-    # petition_text: str | None = Field(default=None)
-    # petitioner: EmailStr = Field(max_length=255)
-    # response: str | None = Field(default=None)
+    status: str = Field(min_length=1, max_length=255)
+    petition_title: str | None = Field(default=None)
+    petition_text: str | None = Field(default=None)
+    petitioner: EmailStr = Field(max_length=255)
+    response: str | None = Field(default=None)
     signatures: int
 
 class Dim_PetitionPrivate(Dim_PetitionBase):
@@ -227,7 +228,7 @@ class Dim_UserUpdateMe(SQLModel):
     email: EmailStr | None = Field(default=None, max_length=255)
 
 class ItemUpdate(ItemBase):
-    title: str | None = Field(default=None, min_length=1, max_length=255)  # type: ignoreclass Dim_UpdatePassword(SQLModel):
+    title: str | None = Field(default=None, min_length=1, max_length=255)  # type: ignore
     current_password: str = Field(min_length=8, max_length=40)
     new_password: str = Field(min_length=8, max_length=40)
 
@@ -267,3 +268,10 @@ class Facts_Petition(Facts_PetitionBase, table=True):
         foreign_key="dim_user.id", nullable=True, index=True
     )
     # created_at: float = Field(default=datetime.datetime.now().replace(tzinfo=datetime.timezone.utc).timestamp())
+
+# ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Dim_PetitionThreshold
+# Database model, database table inferred from class name
+class Dim_PetitionThreshold(SQLModel, table=True):
+    id: int = Field(primary_key=True)
+    vote_threshold: int

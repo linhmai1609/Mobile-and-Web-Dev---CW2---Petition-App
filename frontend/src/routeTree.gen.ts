@@ -18,6 +18,7 @@ import { Route as LoginImport } from './routes/login'
 import { Route as LayoutImport } from './routes/_layout'
 import { Route as LayoutIndexImport } from './routes/_layout/index'
 import { Route as LayoutSettingsImport } from './routes/_layout/settings'
+import { Route as LayoutPetitionsCommitteeImport } from './routes/_layout/petitions-committee'
 import { Route as LayoutPetitionsImport } from './routes/_layout/petitions'
 import { Route as LayoutItemsImport } from './routes/_layout/items'
 import { Route as LayoutAdminImport } from './routes/_layout/admin'
@@ -56,6 +57,11 @@ const LayoutIndexRoute = LayoutIndexImport.update({
 
 const LayoutSettingsRoute = LayoutSettingsImport.update({
   path: '/settings',
+  getParentRoute: () => LayoutRoute,
+} as any)
+
+const LayoutPetitionsCommitteeRoute = LayoutPetitionsCommitteeImport.update({
+  path: '/petitions-committee',
   getParentRoute: () => LayoutRoute,
 } as any)
 
@@ -110,6 +116,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutPetitionsImport
       parentRoute: typeof LayoutImport
     }
+    '/_layout/petitions-committee': {
+      preLoaderRoute: typeof LayoutPetitionsCommitteeImport
+      parentRoute: typeof LayoutImport
+    }
     '/_layout/settings': {
       preLoaderRoute: typeof LayoutSettingsImport
       parentRoute: typeof LayoutImport
@@ -128,6 +138,7 @@ export const routeTree = rootRoute.addChildren([
     LayoutAdminRoute,
     LayoutItemsRoute,
     LayoutPetitionsRoute,
+    LayoutPetitionsCommitteeRoute,
     LayoutSettingsRoute,
     LayoutIndexRoute,
   ]),

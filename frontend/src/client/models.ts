@@ -12,6 +12,7 @@ export type Dim_PetitionCreate = {
   petition_title?: string | null
   petition_text?: string | null
   response?: string | null
+  vote_threshold: number
 }
 
 export type Dim_PetitionPrivate = {
@@ -19,6 +20,7 @@ export type Dim_PetitionPrivate = {
   petition_title?: string | null
   petition_text?: string | null
   response?: string | null
+  vote_threshold: number
   id: string
 }
 
@@ -27,15 +29,17 @@ export type Dim_PetitionPublic = {
   petition_title?: string | null
   petition_text?: string | null
   response?: string | null
+  vote_threshold: number
   id: string
   signatures: number
 }
 
 export type Dim_PetitionPublicMe = {
   status: string
-  petition_title?: string | null
-  petition_text?: string | null
+  petition_title: string
+  petition_text: string
   response?: string | null
+  vote_threshold: number 
   id: string
   signatures: number
   action: string
@@ -43,9 +47,7 @@ export type Dim_PetitionPublicMe = {
 
 export type Dim_PetitionUpdate = {
   status: string
-  petition_title?: string | null
-  petition_text?: string | null
-  response?: string | null
+  response: string
 }
 
 export type Dim_PetitionsPublic = {

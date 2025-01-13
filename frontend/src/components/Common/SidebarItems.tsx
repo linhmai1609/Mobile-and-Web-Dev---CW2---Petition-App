@@ -5,12 +5,11 @@ import { FiBriefcase, FiHome, FiSettings, FiUsers } from "react-icons/fi"
 
 import type { UserPublic } from "../../client"
 
-const items = [
-  { icon: FiHome, title: "Dashboard", path: "/" },
-  { icon: FiBriefcase, title: "Items", path: "/items" },
-  { icon: FiBriefcase, title: "Petitons", path: "/petitions" },
-  { icon: FiSettings, title: "User Settings", path: "/settings" },
-]
+// const items = [
+//   { icon: FiHome, title: "Dashboard", path: "/" },
+//   { icon: FiBriefcase, title: "Items", path: "/items" },
+//   { icon: FiSettings, title: "User Settings", path: "/settings" },
+// ]
 
 interface SidebarItemsProps {
   onClose?: () => void
@@ -23,8 +22,18 @@ const SidebarItems = ({ onClose }: SidebarItemsProps) => {
   const currentUser = queryClient.getQueryData<UserPublic>(["currentUser"])
 
   const finalItems = currentUser?.is_superuser
-    ? [...items, { icon: FiUsers, title: "Admin", path: "/admin" }]
-    : items
+    ? [
+      { icon: FiHome, title: "Dashboard", path: "/" },
+      { icon: FiBriefcase, title: "Petitions", path: "/petitions-committee" },
+      { icon: FiSettings, title: "User Settings", path: "/settings" },
+    ] 
+    // [...items, , { icon: FiUsers, title: "Admin", path: "/admin" }]
+    : [
+      { icon: FiHome, title: "Dashboard", path: "/" },
+      { icon: FiBriefcase, title: "Petitions", path: "/petitions" },
+      { icon: FiSettings, title: "User Settings", path: "/settings" },
+    ] 
+    // [...items, { icon: FiBriefcase, title: "Petitions", path: "/petitions" }]
 
   const listItems = finalItems.map(({ icon, title, path }) => (
     <Flex

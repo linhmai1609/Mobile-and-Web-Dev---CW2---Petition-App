@@ -90,6 +90,10 @@ export const $Dim_PetitionCreate = {
         },
       ],
     },
+    vote_threshold: {
+      type: "number",
+      isRequired: true,
+    },
   },
 } as const
 
@@ -133,6 +137,10 @@ export const $Dim_PetitionPrivate = {
           type: "null",
         },
       ],
+    },
+    vote_threshold: {
+      type: "number",
+      isRequired: true,
     },
     id: {
       type: "string",
@@ -182,6 +190,10 @@ export const $Dim_PetitionPublic = {
           type: "null",
         },
       ],
+    },
+    vote_threshold: {
+      type: "number",
+      isRequired: true,
     },
     id: {
       type: "string",
@@ -236,6 +248,10 @@ export const $Dim_PetitionPublicMe = {
         },
       ],
     },
+    vote_threshold: {
+      type: "number",
+      isRequired: true,
+    },
     id: {
       type: "string",
       isRequired: true,
@@ -259,28 +275,6 @@ export const $Dim_PetitionUpdate = {
       isRequired: true,
       maxLength: 255,
       minLength: 1,
-    },
-    petition_title: {
-      type: "any-of",
-      contains: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-    },
-    petition_text: {
-      type: "any-of",
-      contains: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
     },
     response: {
       type: "any-of",

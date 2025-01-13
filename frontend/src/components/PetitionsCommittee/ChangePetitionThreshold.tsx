@@ -15,16 +15,16 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { type SubmitHandler, useForm } from "react-hook-form"
 
-import { type ApiError, type Dim_PetitionCreate, PetitionsService } from "../../client"
+import { type ApiError, type TDataUpdatePetitionThreshold, PetitionsService } from "../../client"
 import useCustomToast from "../../hooks/useCustomToast"
 import { handleError } from "../../utils"
 
-interface AddPetitionProps {
+interface ChangePetitionThresholdProps {
   isOpen: boolean
   onClose: () => void
 }
 
-const AddPetition = ({ isOpen, onClose }: AddPetitionProps) => {
+const ChangePetitionThreshold = ({ isOpen, onClose }: ChangePetitionThresholdProps) => {
   const queryClient = useQueryClient()
   const showToast = useCustomToast()
   const {
@@ -32,23 +32,19 @@ const AddPetition = ({ isOpen, onClose }: AddPetitionProps) => {
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<Dim_PetitionCreate>({
+  } = useForm({
     mode: "onBlur",
     criteriaMode: "all",
     defaultValues: {
-      status: "open",
-      petition_title: "",
-      petition_text: "",
-      response: "",
-      vote_threshold: 0
+      threshold: 0
     },
   })
 
   const mutation = useMutation({
-    mutationFn: (data: Dim_PetitionCreate) =>
-      PetitionsService.createPetition({ requestBody: data }),
+    mutationFn: (data : number) =>
+      PetitionsService.updateThreshold({ threshold : data }),
     onSuccess: () => {
-      showToast("Success!", "Petition created successfully.", "success")
+      showToast("Success!", "Petition vote threshold has been changed successfully.", "success")
       reset()
       onClose()
     },
@@ -59,9 +55,10 @@ const AddPetition = ({ isOpen, onClose }: AddPetitionProps) => {
       queryClient.invalidateQueries({ queryKey: ["petitions"] })
     },
   })
-
-  const onSubmit: SubmitHandler<Dim_PetitionCreate> = (data) => {
-    mutation.mutate(data)
+  // onSubmit: SubmitHandler<Dim_PetitionCreate> = (data) => {
+  const onSubmit: SubmitHandler<TDataUpdatePetitionThreshold> = (data) => {
+    console.log(data)
+    mutation.mutate(data.threshold)
   }
 
   return (
@@ -74,31 +71,26 @@ const AddPetition = ({ isOpen, onClose }: AddPetitionProps) => {
       >
         <ModalOverlay />
         <ModalContent as="form" onSubmit={handleSubmit(onSubmit)}>
-          <ModalHeader>Add Petition</ModalHeader>
+          <ModalHeader>Change Vote Threshold</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <FormControl isRequired isInvalid={!!errors.petition_title}>
-              <FormLabel htmlFor="petition_title">Title</FormLabel>
+            <FormControl isRequired isInvalid={!!errors.threshold}>
+              <FormLabel htmlFor="threshold">Threshold</FormLabel>
               <Input
-                id="petition_title"
-                {...register("petition_title", {
-                  required: "Title is required.",
+                id="threshold"
+                {...register("threshold", {
+                  required: "Threshold is required.",
+                  validate: {
+                    lessThanFifty: v => v < 50,
+                    positive: v => v > 0,
+                  }
                 })}
-                placeholder="Title"
-                type="text"
+                placeholder="Threshold"
+                type="number"
               />
-              {errors.petition_title && (
-                <FormErrorMessage>{errors.petition_title.message}</FormErrorMessage>
+              {errors.threshold && (
+                <FormErrorMessage>{errors.threshold.message}</FormErrorMessage>
               )}
-            </FormControl>
-            <FormControl mt={4}>
-              <FormLabel htmlFor="description">Description</FormLabel>
-              <Input
-                id="petition_text"
-                {...register("petition_text")}
-                placeholder="Description"
-                type="text"
-              />
             </FormControl>
           </ModalBody>
 
@@ -114,4 +106,4 @@ const AddPetition = ({ isOpen, onClose }: AddPetitionProps) => {
   )
 }
 
-export default AddPetition
+export default ChangePetitionThreshold

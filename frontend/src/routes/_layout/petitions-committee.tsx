@@ -18,20 +18,21 @@ import {
 } from "@chakra-ui/react"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
-import { useEffect, //useState,
+import { useEffect, //useState
    useRef } from "react"
 import { z } from "zod"
 
-import { PetitionsService, type Dim_PetitionPublicMe } from "../../client"
 import Navbar from "../../components/Common/Navbar"
-import AddPetition from "../../components/Petitions/AddPetition"
-import VotePetition from "../../components/Petitions/VotePetition"
+
+import { PetitionsService, type Dim_PetitionPublicMe } from "../../client"
+import ClosePetition from "../../components/PetitionsCommittee/ClosePetition"
+import ChangePetitionThreshold from "../../components/PetitionsCommittee/ChangePetitionThreshold"
 
 const itemsSearchSchema = z.object({
   page: z.number().catch(1),
 })
 
-export const Route = createFileRoute("/_layout/petitions")({
+export const Route = createFileRoute("/_layout/petitions-committee")({
   component: Petitions,
   validateSearch: (search) => itemsSearchSchema.parse(search),
 })
@@ -96,10 +97,7 @@ function PetitionsList() {
     action: ""
   })
   const currentPetition = (petition: Dim_PetitionPublicMe) => {
-    // setCurState(petition)
     currState.current = petition
-    // console.log(curState)
-    console.log(currState)
   }
 
   return (
@@ -115,11 +113,11 @@ function PetitionsList() {
               />
             </Container>
           ) : (
-            <Accordion allowToggle size={{ base: "sm", md: "md" }}>
+            <Accordion allowToggle size={{ base: "sm", md: "md" }} >
               {petitions?.petitions.map((petition) => (
-                <AccordionItem >
+                <AccordionItem onLoad={() => {currentPetition(petition)}}>
                 <h2>
-                  <AccordionButton>
+                  <AccordionButton >
                     <Box textAlign='left' shadow="md">
                       {petition.petition_title?.toUpperCase()}
                     </Box>
@@ -133,7 +131,7 @@ function PetitionsList() {
                     align='left'>
                       <Box>
                         <HStack>
-                          <Text as='b'>Status: </Text>
+                          <Text as='u'>Status: </Text>
                         {
                           petition.status == 'open' ? (
                             <Text as='b' color='green'> {petition.status} </Text>
@@ -145,33 +143,32 @@ function PetitionsList() {
                       </Box>
                       <Box>
                         <HStack>
-                            <Text as='b'>Details: </Text>
+                            <Text as='u'>Details: </Text>
                             <Text > {petition.petition_text} </Text>
                           </HStack>
                       </Box>
                       <Box>
                         <HStack>
-                            <Text as='b'>Response: </Text>
+                            <Text as='u'>Response: </Text>
                             <Text > {petition.response} </Text>
                           </HStack>
                       </Box>
                       <Box>
                         <HStack>
-                            <Text as='b'>Signature(s): </Text>
-                            <Text > {petition.signatures} </Text>currState.current = petition
+                            <Text as='u'>Signature(s): </Text>
+                            <Text > {petition.signatures} </Text>
                           </HStack>
                       </Box>
                       <Box>
-                        <Button onClick = {onOpen} onClickCapture={() => {currentPetition(petition)}} isDisabled={petition.action === "SIGNED" || petition.status === 'closed'}>
-                            Vote
+                        <Button onClick = {onOpen} onClickCapture={() => {currentPetition(petition)}} isDisabled={petition.signatures < petition.vote_threshold || petition.status === 'closed'}>
+                            Respond and Close Petition
                         </Button>
-                        <VotePetition petition={currState.current} isOpen={isOpen} onClose={onClose}></VotePetition>
+                        <ClosePetition petition={currState.current} isOpen={isOpen} onClose={onClose}></ClosePetition>
                       </Box>
                   </VStack>
                 </AccordionPanel>
               </AccordionItem>
-              ))
-              }
+              ))}
             </Accordion>
           ) 
         }
@@ -202,7 +199,7 @@ function Petitions() {
         Petitions
       </Heading>
 
-      <Navbar type={"Partition"} addModalAs={AddPetition} />
+      <Navbar type={"Change Partition Threshold"} addModalAs={ChangePetitionThreshold} />
       <PetitionsList />
     </Container>
   )
