@@ -119,7 +119,7 @@ function PetitionsList() {
                 <h2>
                   <AccordionButton >
                     <Box textAlign='left' shadow="md">
-                      {petition.petition_title?.toUpperCase()}
+                      PETITION: {petition.petition_title?.toUpperCase()}
                     </Box>
                     <AccordionIcon />
                   </AccordionButton>
