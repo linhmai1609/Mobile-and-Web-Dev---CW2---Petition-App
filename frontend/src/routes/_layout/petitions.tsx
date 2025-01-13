@@ -18,10 +18,10 @@ import {
 } from "@chakra-ui/react"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { z } from "zod"
 
-import { PetitionsService } from "../../client"
+import { PetitionsService, type Dim_PetitionPublicMe } from "../../client"
 import Navbar from "../../components/Common/Navbar"
 import AddPetition from "../../components/Petitions/AddPetition"
 import VotePetition from "../../components/Petitions/VotePetition"
@@ -74,6 +74,22 @@ function PetitionsList() {
     }
   }, [page, queryClient, hasNextPage])
 
+  const [curState, setCurState] = useState<Dim_PetitionPublicMe>({
+    status: "",
+    petition_title: "",
+    petition_text: "",
+    response: "",
+    vote_threshold: 0,
+    id: "",
+    signatures: 0,
+    action: ""
+  })
+  const currentPetition = (petition: Dim_PetitionPublicMe) => {
+    setCurState(petition)
+    console.log(curState)
+    console.log(petition)
+  }
+
   return (
     <>
         { isPending ? (
@@ -100,12 +116,12 @@ function PetitionsList() {
                 </h2>
                 <AccordionPanel pb={4}>
                   <VStack 
-                    divider={<StackDivider borderColor='gray' />}
+                    divider={<StackDivider borderColor='#4A5568' />}
                     spacing={4}
                     align='left'>
                       <Box>
                         <HStack>
-                          <Text as='u'>Status: </Text>
+                          <Text as='b'>Status: </Text>
                         {
                           petition.status == 'open' ? (
                             <Text as='b' color='green'> {petition.status} </Text>
@@ -117,32 +133,33 @@ function PetitionsList() {
                       </Box>
                       <Box>
                         <HStack>
-                            <Text as='u'>Details: </Text>
+                            <Text as='b'>Details: </Text>
                             <Text > {petition.petition_text} </Text>
                           </HStack>
                       </Box>
                       <Box>
                         <HStack>
-                            <Text as='u'>Response: </Text>
+                            <Text as='b'>Response: </Text>
                             <Text > {petition.response} </Text>
                           </HStack>
                       </Box>
                       <Box>
                         <HStack>
-                            <Text as='u'>Signature(s): </Text>
+                            <Text as='b'>Signature(s): </Text>
                             <Text > {petition.signatures} </Text>
                           </HStack>
                       </Box>
                       <Box>
-                        <Button onClick={onOpen} isDisabled={petition.action === "SIGNED"}>
+                        <Button onClick = {onOpen} onClickCapture={() => {currentPetition(petition)}} isDisabled={petition.action === "SIGNED" || petition.status === 'closed'}>
                             Vote
                         </Button>
-                        <VotePetition petition={petition} isOpen={isOpen} onClose={onClose}></VotePetition>
+                        <VotePetition petition={curState} isOpen={isOpen} onClose={onClose}></VotePetition>
                       </Box>
                   </VStack>
                 </AccordionPanel>
               </AccordionItem>
-              ))}
+              ))
+              }
             </Accordion>
           ) 
         }
