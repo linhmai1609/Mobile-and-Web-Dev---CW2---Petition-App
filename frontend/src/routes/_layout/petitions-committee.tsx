@@ -160,6 +160,12 @@ function PetitionsList() {
                           </HStack>
                       </Box>
                       <Box>
+                          <HStack>
+                            <Text as='b'>Signature Threshold(s): </Text>
+                            <Text > {petition.vote_threshold} </Text>currState.current = petition
+                          </HStack>
+                      </Box>
+                      <Box>
                         <Button onClick = {onOpen} onClickCapture={() => {currentPetition(petition)}} isDisabled={petition.signatures < petition.vote_threshold || petition.status === 'closed'}>
                             Respond and Close Petition
                         </Button>
