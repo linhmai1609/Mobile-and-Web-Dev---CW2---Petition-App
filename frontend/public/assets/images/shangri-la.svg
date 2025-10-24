@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 800">
+  <!-- Circle representing Shangri-La -->
+  <circle cx="300" cy="400" r="200" fill="skyblue" stroke="darkblue" stroke-width="10" />
+  
+  <!-- Simple landscape within the circle -->
+  <!-- Mountains -->
+  <polygon points="150,350 250,200 350,350" fill="gray" />
+  <polygon points="350,350 450,180 550,350" fill="darkgray" />
+  
+  <!-- Snow on mountains -->
+  <polygon points="250,200 270,230 290,200" fill="white" />
+  <polygon points="450,180 470,210 490,180" fill="white" />
+  
+  <!-- Green valley -->
+  <ellipse cx="300" cy="370" rx="180" ry="80" fill="green" />
+  
+  <!-- River -->
+  <path d="M 150 400 Q 300 360 450 400" fill="none" stroke="blue" stroke-width="10" />
+  
+  <!-- Trees -->
+  <circle cx="220" cy="330" r="20" fill="darkgreen" />
+  <circle cx="260" cy="360" r="25" fill="darkgreen" />
+  <circle cx="320" cy="350" r="30" fill="darkgreen" />
+  <circle cx="380" cy="370" r="25" fill="darkgreen" />
+  <circle cx="420" cy="360" r="20" fill="darkgreen" />
+  
+  <!-- Sun -->
+  <circle cx="500" cy="230" r="50" fill="yellow" />
+  
+  <!-- Text next to the circle -->
+  <text x="580" y="420" font-family="Arial" font-size="80" fill="darkblue">Shangri-La</text>
+</svg>

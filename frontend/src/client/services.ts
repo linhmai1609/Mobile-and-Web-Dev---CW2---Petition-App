@@ -8,16 +8,25 @@ import type {
   NewPassword,
   Token,
   UserPublic,
+  Dim_UserCreate,
+  Dim_UserPublic,
+  Dim_UserRegister,
+  Dim_UsersPublic,
+  Dim_UserUpdate,
+  Dim_UserUpdateMe,
   UpdatePassword,
-  UserCreate,
-  UserRegister,
-  UsersPublic,
-  UserUpdate,
-  UserUpdateMe,
   ItemCreate,
   ItemPublic,
   ItemsPublic,
   ItemUpdate,
+  Dim_PetitionCreate,
+  Dim_PetitionPublic,
+  Dim_PetitionPrivate,
+  Dim_PetitionsPublicMe,
+  Dim_PetitionUpdate,
+  Dim_PetitionPublicMe,
+  Facts_Petition,
+  Facts_PetitionCreate,
 } from "./models"
 
 export type TDataLoginAccessToken = {
@@ -139,22 +148,22 @@ export type TDataReadUsers = {
   skip?: number
 }
 export type TDataCreateUser = {
-  requestBody: UserCreate
+  requestBody: Dim_UserCreate
 }
 export type TDataUpdateUserMe = {
-  requestBody: UserUpdateMe
+  requestBody: Dim_UserUpdateMe
 }
 export type TDataUpdatePasswordMe = {
   requestBody: UpdatePassword
 }
 export type TDataRegisterUser = {
-  requestBody: UserRegister
+  requestBody: Dim_UserRegister
 }
 export type TDataReadUserById = {
   userId: string
 }
 export type TDataUpdateUser = {
-  requestBody: UserUpdate
+  requestBody: Dim_UserUpdate
   userId: string
 }
 export type TDataDeleteUser = {
@@ -165,12 +174,12 @@ export class UsersService {
   /**
    * Read Users
    * Retrieve users.
-   * @returns UsersPublic Successful Response
+   * @returns Dim_UsersPublic Successful Response
    * @throws ApiError
    */
   public static readUsers(
     data: TDataReadUsers = {},
-  ): CancelablePromise<UsersPublic> {
+  ): CancelablePromise<Dim_UsersPublic> {
     const { limit = 100, skip = 0 } = data
     return __request(OpenAPI, {
       method: "GET",
@@ -188,12 +197,12 @@ export class UsersService {
   /**
    * Create User
    * Create new user.
-   * @returns UserPublic Successful Response
+   * @returns Dim_UserPublic Successful Response
    * @throws ApiError
    */
   public static createUser(
     data: TDataCreateUser,
-  ): CancelablePromise<UserPublic> {
+  ): CancelablePromise<Dim_UserPublic> {
     const { requestBody } = data
     return __request(OpenAPI, {
       method: "POST",
@@ -209,10 +218,10 @@ export class UsersService {
   /**
    * Read User Me
    * Get current user.
-   * @returns UserPublic Successful Response
+   * @returns Dim_UserPublic Successful Response
    * @throws ApiError
    */
-  public static readUserMe(): CancelablePromise<UserPublic> {
+  public static readUserMe(): CancelablePromise<Dim_UserPublic> {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/users/me",
@@ -235,12 +244,12 @@ export class UsersService {
   /**
    * Update User Me
    * Update own user.
-   * @returns UserPublic Successful Response
+   * @returns Dim_UserPublic Successful Response
    * @throws ApiError
    */
   public static updateUserMe(
     data: TDataUpdateUserMe,
-  ): CancelablePromise<UserPublic> {
+  ): CancelablePromise<Dim_UserPublic> {
     const { requestBody } = data
     return __request(OpenAPI, {
       method: "PATCH",
@@ -277,12 +286,12 @@ export class UsersService {
   /**
    * Register User
    * Create new user without the need to be logged in.
-   * @returns UserPublic Successful Response
+   * @returns Dim_UserPublic Successful Response
    * @throws ApiError
    */
   public static registerUser(
     data: TDataRegisterUser,
-  ): CancelablePromise<UserPublic> {
+  ): CancelablePromise<Dim_UserPublic> {
     const { requestBody } = data
     return __request(OpenAPI, {
       method: "POST",
@@ -298,12 +307,12 @@ export class UsersService {
   /**
    * Read User By Id
    * Get a specific user by id.
-   * @returns UserPublic Successful Response
+   * @returns Dim_UserPublic Successful Response
    * @throws ApiError
    */
   public static readUserById(
     data: TDataReadUserById,
-  ): CancelablePromise<UserPublic> {
+  ): CancelablePromise<Dim_UserPublic> {
     const { userId } = data
     return __request(OpenAPI, {
       method: "GET",
@@ -320,12 +329,12 @@ export class UsersService {
   /**
    * Update User
    * Update a user.
-   * @returns UserPublic Successful Response
+   * @returns Dim_UserPublic Successful Response
    * @throws ApiError
    */
   public static updateUser(
     data: TDataUpdateUser,
-  ): CancelablePromise<UserPublic> {
+  ): CancelablePromise<Dim_UserPublic> {
     const { requestBody, userId } = data
     return __request(OpenAPI, {
       method: "PATCH",
@@ -521,6 +530,176 @@ export class ItemsService {
       path: {
         id,
       },
+      errors: {
+        422: `Validation Error`,
+      },
+    })
+  }
+}
+
+export type TDataReadPetitions = {
+  limit?: number
+  skip?: number
+  status?: string
+}
+export type TDataCreatePetition = {
+  requestBody: Dim_PetitionCreate
+}
+
+export type TDataReadPetition = {
+  id: string
+}
+export type TDataUpdatePetition = {
+  id: string
+  requestBody: Dim_PetitionUpdate
+  addons: Dim_PetitionPublicMe
+}
+export type TDataUpdatePetitionThreshold = {
+  threshold: number
+}
+export type TDataVotePetition = {
+  id: string
+  requestBody: Facts_PetitionCreate
+}
+
+export class PetitionsService {
+  /**
+   * Read Items
+   * Retrieve petitions for current user.
+   * @returns Dim_PetitionsPublicMe Successful Response
+   * @throws ApiError
+   */
+  public static readPetitions(
+    data: TDataReadPetitions = {},
+  ): CancelablePromise<Dim_PetitionsPublicMe> {
+    const { limit = 100, skip = 0, status = "" } = data
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/slpp/petitions/me",
+      query: {
+        status,
+        skip,
+        limit,
+      },
+      errors: {
+        422: `Validation Error`,
+      },
+    })
+  }
+
+  /**
+   * Create Item
+   * Create new Petition.
+   * @returns Dim_PetitionPrivate Successful Response
+   * @throws ApiError
+   */
+  public static createPetition(
+    data: TDataCreatePetition,
+  ): CancelablePromise<Dim_PetitionPrivate> {
+    const { requestBody } = data
+    return __request(OpenAPI, {
+      method: "POST",
+      url: "/api/v1/slpp/petitions/",
+      body: requestBody,
+      mediaType: "application/json",
+      errors: {
+        422: `Validation Error`,
+      },
+    })
+  }
+
+  /**
+   * Read Item
+   * Get petition by ID.
+   * @returns Dim_PetitionsPublic Successful Response
+   * @throws ApiError
+   */
+  public static readPetition(
+    data: TDataReadPetition,
+  ): CancelablePromise<Dim_PetitionPublic> {
+    const { id } = data
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/slpp/petitions/{id}",
+      path: {
+        id,
+      },
+      errors: {
+        422: `Validation Error`,
+      },
+    })
+  }
+
+  /**
+   * Update Item
+   * Update a petition's comment and status.
+   * @returns Dim_PetitionPrivate Successful Response
+   * @throws ApiError
+   */
+  public static updatePetition(
+    data: TDataUpdatePetition,
+  ): CancelablePromise<Dim_PetitionPrivate> {
+    const { id, requestBody, addons} = data
+    return __request(OpenAPI, {
+      method: "PATCH",
+      url: "/api/v1/slpp/petitions/{id}",
+      path: {
+        id,
+      },
+      body: {
+        "status": requestBody.status,
+        "petition_title": addons.petition_title,
+        "petition_text": addons.petition_text,
+        "response": requestBody.response,
+        "vote_threshold": addons.vote_threshold
+      },
+      mediaType: "application/json",
+      errors: {
+        422: `Validation Error`,
+      },
+    })
+  }
+
+  /**
+   * Update Item
+   * Update all open petition's vote threshold
+   * @returns Message Successful Response
+   * @throws ApiError
+   */
+  public static updateThreshold(
+    data: TDataUpdatePetitionThreshold,
+  ): CancelablePromise<Message> {
+    const { threshold } = data
+    return __request(OpenAPI, {
+      method: "POST",
+      url: "/api/v1/slpp/petitions/threshold",
+      query: {
+        threshold,
+      },
+      errors: {
+        422: `Validation Error`,
+      },
+    })
+  }
+
+  /**
+   * Create Item
+   * Vote a petition.
+   * @returns Facts_Petition Successful Response
+   * @throws ApiError
+   */
+  public static votePetition(
+    data: TDataVotePetition,
+  ): CancelablePromise<Facts_Petition> {
+    const { id, requestBody } = data
+    return __request(OpenAPI, {
+      method: "POST",
+      url: "/api/v1/slpp/petitions/vote/{id}",
+      path: {
+        id,
+      },
+      body: requestBody,
+      mediaType: "application/json",
       errors: {
         422: `Validation Error`,
       },

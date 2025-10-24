@@ -17,8 +17,8 @@ import {
 } from "@tanstack/react-router"
 import { type SubmitHandler, useForm } from "react-hook-form"
 
-import Logo from "/assets/images/fastapi-logo.svg"
-import type { UserRegister } from "../client"
+import Logo from "/assets/images/shangri-la.svg"
+import type { Dim_UserRegister } from "../client"
 import useAuth, { isLoggedIn } from "../hooks/useAuth"
 import { confirmPasswordRules, emailPattern, passwordRules } from "../utils"
 
@@ -33,7 +33,7 @@ export const Route = createFileRoute("/signup")({
   },
 })
 
-interface UserRegisterForm extends UserRegister {
+interface UserRegisterForm extends Dim_UserRegister {
   confirm_password: string
 }
 
@@ -50,6 +50,8 @@ function SignUp() {
     defaultValues: {
       email: "",
       full_name: "",
+      dob: "",
+      bioid: "",
       password: "",
       confirm_password: "",
     },
@@ -80,21 +82,6 @@ function SignUp() {
             alignSelf="center"
             mb={4}
           />
-          <FormControl id="full_name" isInvalid={!!errors.full_name}>
-            <FormLabel htmlFor="full_name" srOnly>
-              Full Name
-            </FormLabel>
-            <Input
-              id="full_name"
-              minLength={3}
-              {...register("full_name", { required: "Full Name is required" })}
-              placeholder="Full Name"
-              type="text"
-            />
-            {errors.full_name && (
-              <FormErrorMessage>{errors.full_name.message}</FormErrorMessage>
-            )}
-          </FormControl>
           <FormControl id="email" isInvalid={!!errors.email}>
             <FormLabel htmlFor="username" srOnly>
               Email
@@ -110,6 +97,51 @@ function SignUp() {
             />
             {errors.email && (
               <FormErrorMessage>{errors.email.message}</FormErrorMessage>
+            )}
+          </FormControl>
+          <FormControl id="full_name" isInvalid={!!errors.full_name}>
+            <FormLabel htmlFor="full_name" srOnly>
+              Full Name
+            </FormLabel>
+            <Input
+              id="full_name"
+              minLength={3}
+              {...register("full_name", { required: "Full Name is required" })}
+              placeholder="Full Name"
+              type="text"
+            />
+            {errors.full_name && (
+              <FormErrorMessage>{errors.full_name.message}</FormErrorMessage>
+            )}
+          </FormControl>
+          <FormControl id="dob" isInvalid={!!errors.dob}>
+            <FormLabel htmlFor="dob" srOnly >
+              Date of Birth
+            </FormLabel>
+            <Input
+              id="dob"
+              type='date'
+              minLength={3}
+              {...register("dob", { required: "Date of Birth is required" })}
+              placeholder="Date of Birth"
+            />
+            {errors.dob && (
+              <FormErrorMessage>{errors.dob.message}</FormErrorMessage>
+            )}
+          </FormControl>
+          <FormControl id="bioid" isInvalid={!!errors.full_name}>
+            <FormLabel htmlFor="bioid" srOnly>
+              BioID
+            </FormLabel>
+            <Input
+              id="bioid"
+              minLength={3}
+              {...register("bioid", { required: "BioID is required" })}
+              placeholder="BioID"
+              type="text"
+            />
+            {errors.bioid && (
+              <FormErrorMessage>{errors.bioid.message}</FormErrorMessage>
             )}
           </FormControl>
           <FormControl id="password" isInvalid={!!errors.password}>
@@ -146,6 +178,7 @@ function SignUp() {
               </FormErrorMessage>
             )}
           </FormControl>
+          
           <Button variant="primary" type="submit" isLoading={isSubmitting}>
             Sign Up
           </Button>
